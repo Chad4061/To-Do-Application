@@ -20,9 +20,34 @@ namespace To_Do_Application
     /// </summary>
     public partial class MainWindow : Window
     {
+        private TaskController taskController;
         public MainWindow()
         {
             InitializeComponent();
+            taskController = new TaskController(this);
+        }
+
+        private void AddTaskButton_Click(object sender, RoutedEventArgs e)
+        {
+            taskController.AddTaskToList();
+        }
+
+        private void TaskTextbox_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Enter)
+            {
+                taskController.AddTaskToList();
+            }
+        }
+
+        private void DeleteTaskButton_Click(object sender, RoutedEventArgs e)
+        {
+            taskController.RemoveTaskFromList();
+        }
+
+        private void MarkAsCompleteButton_Click(object sender, RoutedEventArgs e)
+        {
+            taskController.MarkTaskAsComplete();
         }
     }
 }

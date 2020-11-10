@@ -14,21 +14,32 @@ namespace To_Do_Application
     {
         private MainWindow _window;
 
-        private ObservableCollection<string> tasks;
+        private ObservableCollection<ToDoTask> _tasks;
 
         public event PropertyChangedEventHandler PropertyChanged;
+        private ToDoTask _toDoTask;
+
+        public ToDoTask toDoTask
+        {
+            get { return _toDoTask; }
+            set 
+            { 
+                _toDoTask = value;
+                RaisePropertyChanged("toDoTask");
+            }
+        }
 
         public void RaisePropertyChanged(string propertyName)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
 
-        public ObservableCollection<string> Tasks
+        public ObservableCollection<ToDoTask> Tasks
         {
-            get { return tasks; }
+            get { return _tasks; }
             set 
             {
-                tasks = value;
+                _tasks = value;
                 RaisePropertyChanged("Tasks");
             }
         }
@@ -36,17 +47,18 @@ namespace To_Do_Application
         public TaskController(MainWindow window)
         {
             _window = window;
-            Tasks = new ObservableCollection<string>();
+            Tasks = new ObservableCollection<ToDoTask>();
             _window.TasksDataGrid.ItemsSource = Tasks;
             
         }
 
         public void AddTaskToList()
         {
-            string newTask = _window.TaskTextbox.Text;
+            string taskName = _window.TaskTextbox.Text;
+            ToDoTask newTask = new ToDoTask { TaskName = taskName, Status = "Not_Done" };
             _window.TaskTextbox.Clear();
 
-            if (string.IsNullOrWhiteSpace(newTask))
+            if (string.IsNullOrWhiteSpace(taskName))
                 return;
 
             Tasks.Add(newTask);
@@ -54,12 +66,24 @@ namespace To_Do_Application
 
         public void MarkTaskAsComplete()
         {
+            if (_window.TasksDataGrid.SelectedItem == null)
+                return;
 
+            toDoTask = (ToDoTask)_window.TasksDataGrid.SelectedItem;
+
+            if (toDoTask.Status == "Done")
+                toDoTask.Status = "Not_Done";
+            else
+                toDoTask.Status = "Done";
+
+            _window.TasksDataGrid.ItemsSource = null;
+            _window.TasksDataGrid.ItemsSource = Tasks;
         }
 
         public void RemoveTaskFromList()
         {
-            Tasks.Remove((string)_window.TasksDataGrid.SelectedItem);
+            toDoTask = (ToDoTask)_window.TasksDataGrid.SelectedItem;
+            Tasks.Remove(toDoTask);
         }
 
     }

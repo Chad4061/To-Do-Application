@@ -37,7 +37,8 @@ namespace To_Do_Application
         {
             _window = window;
             Tasks = new ObservableCollection<string>();
-            _window.TasksListbox.ItemsSource = Tasks;
+            _window.TasksDataGrid.ItemsSource = Tasks;
+            
         }
 
         public void AddTaskToList()
@@ -48,7 +49,7 @@ namespace To_Do_Application
             if (string.IsNullOrWhiteSpace(newTask))
                 return;
 
-            Tasks.Add(newTask); 
+            Tasks.Add(newTask);
         }
 
         public void MarkTaskAsComplete()
@@ -58,7 +59,7 @@ namespace To_Do_Application
 
         public void RemoveTaskFromList()
         {
-            Tasks.Remove((string)_window.TasksListbox.SelectedItem);
+            Tasks.Remove((string)_window.TasksDataGrid.SelectedItem);
         }
 
     }

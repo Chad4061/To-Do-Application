@@ -25,6 +25,7 @@ namespace To_Do_Application
         {
             InitializeComponent();
             taskController = new TaskController(this);
+            DataContext = taskController;
         }
 
         private void AddTaskButton_Click(object sender, RoutedEventArgs e)
